@@ -1,4 +1,6 @@
-public class Btree {
+import java.io.Serializable;
+
+public class Btree implements Serializable{
     public Node root;
 
 
@@ -95,9 +97,7 @@ public class Btree {
     public boolean search(Node node, int value) {
 
         int i = 1;
-
         while (i <= node.numberOfNodes && value > node.key[i - 1]) {
-
             i++;
         }
 

@@ -1,4 +1,6 @@
-public class Node {
+import java.io.Serializable;
+
+public class Node implements Serializable {
     public int numberOfNodes;              // number of nodes
 
     public int key[];                      // the array that holds the keys value.
