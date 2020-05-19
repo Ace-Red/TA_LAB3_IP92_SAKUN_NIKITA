@@ -1,8 +1,8 @@
 import java.io.Serializable;
 
-public class Btree implements Serializable{
+public class Btree implements Serializable {
     public Node root;
-
+    int t = 10;
 
     Btree() {
 
@@ -18,7 +18,7 @@ public class Btree implements Serializable{
     public void insert(int k) {
 
         Node r = root;
-        if (r.numberOfNodes == 3) {
+        if (r.numberOfNodes == (2 * t - 1)) {
 
             Node s = new Node();
 
@@ -32,8 +32,7 @@ public class Btree implements Serializable{
             splitChild(s, 1, r);
 
             insertNonfull(s, k);
-        }
-        else {
+        } else {
             insertNonfull(r, k);
         }
     }
@@ -55,7 +54,7 @@ public class Btree implements Serializable{
             }
             i++;
 
-            if (node.children[i - 1].numberOfNodes == 3) {
+            if (node.children[i - 1].numberOfNodes == (2 * t - 1)) {
 
                 splitChild(node, i, node.children[i - 1]);
 
@@ -72,24 +71,28 @@ public class Btree implements Serializable{
 
         Node z = new Node();
         z.isLeaf = newChild.isLeaf;
-        z.numberOfNodes = 1;
-        z.key[0] = newChild.key[2];
-
-
+        z.numberOfNodes = t - 1;
+        for (int i = 0; i < t - 1; i++) {
+            z.key[i] = newChild.key[i + t];
+        }
         if (!newChild.isLeaf) {
-            z.children[1] = newChild.children[3];
-            z.children[0] = newChild.children[2];
+            for (int i = 0; i < t; i++) {
+                z.children[i] = newChild.children[i + t];
+            }
         }
-        newChild.numberOfNodes = 1;
+        newChild.numberOfNodes = (t - 1);
 
 
-        for (int j = parentNode.numberOfNodes + 1; j >= childIndex + 1; j--) {
-            parentNode.children[j] = parentNode.children[j - 1];
-            parentNode.key[j - 1] = parentNode.key[j - 2];
+        for (int j = parentNode.numberOfNodes; j >= childIndex; j--) {
+            parentNode.children[j + 1] = parentNode.children[j];
         }
-
         parentNode.children[childIndex] = z;
-        parentNode.key[childIndex - 1] = newChild.key[1];
+
+        for (int j = parentNode.numberOfNodes; j >= childIndex; j--) {
+            parentNode.key[j + 1] = parentNode.key[j];
+        }
+        parentNode.key[childIndex - 1] = newChild.key[10];
+
         parentNode.numberOfNodes++;
     }
 
@@ -172,16 +175,14 @@ public class Btree implements Serializable{
 
 
             for (int i = node.numberOfNodes - 1; i >= 0; i--) {
-                if (!node.isLeaf)
-                {
+                if (!node.isLeaf) {
                     printBtree(node.children[i], indent);
                 }
 
                 if (node.key[i] > 0)
                     System.out.println(indent + node.key[i]);
             }
-            if (!node.isLeaf)
-            {
+            if (!node.isLeaf) {
                 printBtree(node.children[node.numberOfNodes], indent);
             }
         }

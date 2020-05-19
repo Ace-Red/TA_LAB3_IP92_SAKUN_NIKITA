@@ -1,18 +1,14 @@
 import java.io.Serializable;
 
 public class Node implements Serializable {
-    public int numberOfNodes;              // number of nodes
-
-    public int key[];                      // the array that holds the keys value.
-
-    public Node children[];                // the array that holds the references of the keys in the node.
-
-    public boolean isLeaf;                   // the variable to deterime if the node is is Leaf or not.
-
+    public int numberOfNodes;
+    public int[] key;
+    public Node[] children;
+    public boolean isLeaf;
 
     Node() {
-        key = new int[20];             // The node can have at most 3 keys
-        children = new Node[21];       // We have 4 references for each node
-        isLeaf = true;                  // assign the node to be Leaf.
+        key = new int[20];
+        children = new Node[21];
+        isLeaf = true;
     }
 }
