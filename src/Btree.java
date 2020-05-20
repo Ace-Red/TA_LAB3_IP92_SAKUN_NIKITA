@@ -11,7 +11,7 @@ public class Btree implements Serializable {
         root.isLeaf = true;
         root.numberOfNodes = 0;
 
-        root.key[0] = -1;
+        root.key[0].value = -1;
     }
 
 
@@ -42,14 +42,14 @@ public class Btree implements Serializable {
         int i = node.numberOfNodes;
 
         if (node.isLeaf) {
-            while (i >= 1 && value < node.key[i - 1]) {
+            while (i >= 1 && value < node.key[i - 1].value) {
                 node.key[i] = node.key[i - 1];
                 i--;
             }
-            node.key[i] = value;
+            node.key[i] = new Note(value);
             node.numberOfNodes++;
         } else {
-            while (i >= 1 && value < node.key[i - 1]) {
+            while (i >= 1 && value < node.key[i - 1].value) {
                 i--;
             }
             i++;
@@ -58,7 +58,7 @@ public class Btree implements Serializable {
 
                 splitChild(node, i, node.children[i - 1]);
 
-                if (value > node.key[i - 1]) {
+                if (value > node.key[i - 1].value) {
                     i++;
                 }
             }
@@ -100,11 +100,11 @@ public class Btree implements Serializable {
     public boolean search(Node node, int value) {
 
         int i = 1;
-        while (i <= node.numberOfNodes && value > node.key[i - 1]) {
+        while (i <= node.numberOfNodes && value > node.key[i - 1].value) {
             i++;
         }
 
-        if (i <= node.numberOfNodes && value == node.key[i - 1]) {
+        if (i <= node.numberOfNodes && value == node.key[i - 1].value) {
 
             return true;
         }
@@ -136,16 +136,16 @@ public class Btree implements Serializable {
         int i = 1;
 
 
-        while (i <= node.numberOfNodes && value > node.key[i - 1]) {
+        while (i <= node.numberOfNodes && value > node.key[i - 1].value) {
 
             i++;
         }
 
         if (node.isLeaf) {
 
-            if (i <= node.numberOfNodes && value == node.key[i - 1]) {
+            if (i <= node.numberOfNodes && value == node.key[i - 1].value) {
 
-                node.key[i - 1] = 0;
+                node.key[i - 1].value = 0;
 
                 for (int j = i - 1; j < node.numberOfNodes - 1; j++) {
                     node.key[j] = node.key[j + 1];
@@ -179,7 +179,7 @@ public class Btree implements Serializable {
                     printBtree(node.children[i], indent);
                 }
 
-                if (node.key[i] > 0)
+                if (node.key[i].value > 0)
                     System.out.println(indent + node.key[i]);
             }
             if (!node.isLeaf) {
@@ -187,4 +187,32 @@ public class Btree implements Serializable {
             }
         }
     }
+    public void redact(int key,int value2){
+
+    }
+    public String searchKey(int key){
+        Node x = root;
+
+        return searchKey2(x, key);
+    }
+    public String searchKey2(Node node, int value) {
+
+        int i = 1;
+        while (i <= node.numberOfNodes && value > node.key[i - 1].value) {
+            i++;
+        }
+
+        if (i <= node.numberOfNodes && value == node.key[i - 1].value) {
+
+            return (""+node.key[i - 1].value);
+        }
+
+        if (!node.isLeaf) {
+
+            return searchKey2(node.children[i - 1], value);
+        }
+
+        return "Не найдено!";
+    }
+
 }
